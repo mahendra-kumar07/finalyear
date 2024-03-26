@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  width: 400px;
+  height: 600px;
+}
+
+#image-container {
+  border: 2px dashed #aaa;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 300px ; /* Allow dynamic width based on content */
+  max-width: 1000px; /* Set a maximum width */
+  height: 200px;
+  overflow: auto; /* Add scrollbars if content overflows both vertically and horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
