@@ -1,22 +1,52 @@
 body {
+  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0;
+  padding: 20px;
   width: 400px;
-  height: 600px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 #image-container {
   border: 2px dashed #aaa;
   padding: 20px;
   margin-bottom: 20px;
-  width: 300px ; /* Allow dynamic width based on content */
-  max-width: 1000px; /* Set a maximum width */
+  width: 100%; /* Allow dynamic width based on content */
+  max-width: 400px; /* Set a maximum width */
   height: 200px;
   overflow: auto; /* Add scrollbars if content overflows both vertically and horizontally */
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#image-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#upload-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#upload-button:hover {
+  background-color: #45a049;
+}
+
+#response-message {
+  font-size: 14px;
+  margin-top: 10px;
 }

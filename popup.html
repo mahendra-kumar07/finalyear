@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Paste</title>
+  <title>Handwritten Character Recognition</title>
   <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
-  <h1><center>Handwritten Character Recognition</center></h1>
-  <div id="image-container" content="true">
+  <h1>Handwritten Character Recognition</h1>
+  <div id="image-container">
     <!-- Image will be displayed here -->
   </div>
   <input type="file" id="image-input" style="display: none;" accept="image/*">
-  <button id="upload-button">Upload Image</button>
+  <label for="image-input" id="upload-button">Upload Image</label>
   <div id="response-message"></div>
+
+  <!-- Hidden textarea to capture paste event -->
+  <textarea id="hidden-textarea" style="position: absolute; top: -9999px; left: -9999px;"></textarea>
+
+  <button id="start-button">Start</button>
+  <button id="stop-button" style="display: none;">Stop</button>
+  <button id="download-button" style="display: none;">Download Recognized Text</button>
 
   <script src="popup.js"></script>
 </body>

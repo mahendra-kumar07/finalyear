@@ -1,51 +1,124 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Add event listener for paste event
-  document.addEventListener('paste', function(event) {
-    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-    for (index in items) {
-      var item = items[index];
-      if (item.kind === 'file') {
-        var blob = item.getAsFile();
-        var reader = new FileReader();
-        reader.onload = function(event) {
-          // Display the pasted image inside the image-container
-          var img = document.createElement('img');
-          img.src = event.target.result;
-          document.getElementById('image-container').innerHTML = '';
-          document.getElementById('image-container').appendChild(img);
-        };
-        reader.readAsDataURL(blob);
-      }
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to handle image paste event
+    function handleImagePaste(event) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+        for (let index in items) {
+            const item = items[index];
+            if (item.kind === 'file') {
+                const blob = item.getAsFile();
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const imageContainer = document.getElementById('image-container');
+                        imageContainer.innerHTML = '';
+                        imageContainer.appendChild(img);
+                    }
+                    img.src = event.target.result;
+                }
+                reader.readAsDataURL(blob);
+            }
+        }
     }
-  });
 
-  // Add event listener for click event on upload button
-  document.getElementById("upload-button").addEventListener("click", function() {
-    // Trigger click event on hidden file input
-    document.getElementById("image-input").click();
-  });
-
-  // Add event listener for change event on file input
-  document.getElementById("image-input").addEventListener("change", function() {
-    var file = this.files[0];
-    if (file) {
-      var formData = new FormData();
-      formData.append("image", file);
-
-      fetch("http://localhost:8000/upload", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Handle response from backend
-        console.log(data);
-        document.getElementById("response-message").innerText = "Image uploaded successfully.";
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        document.getElementById("response-message").innerText = "Error uploading image.";
-      });
+    // Function to handle file input change event
+    function handleFileInputChange(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+                const imageContainer = document.getElementById('image-container');
+                imageContainer.innerHTML = '';
+                imageContainer.appendChild(img);
+            }
+            img.src = event.target.result;
+        }
+        reader.readAsDataURL(file);
     }
-  });
+
+    // Function to handle image upload to backend
+    async function uploadImageToServer(imageData) {
+        const responseMessage = document.getElementById('response-message');
+        try {
+            const response = await fetch('http://localhost:8000/upload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_data: imageData })
+            });
+            if (response.ok) {
+                responseMessage.textContent = 'Sign in';
+            } else {
+                throw new Error('Failed to upload image');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            responseMessage.textContent = 'Error uploading image';
+        }
+    }
+
+    // Function to start recognition process
+    function startRecognition() {
+        // Show stop button and hide start button
+        document.getElementById('start-button').style.display = 'none';
+        document.getElementById('stop-button').style.display = 'inline-block';
+        // Logic to start recognition process
+    }
+
+    // Function to stop recognition process and show download button
+    function stopRecognitionAndShowDownloadButton() {
+        // Hide stop button and show start button
+        document.getElementById('stop-button').style.display = 'none';
+        document.getElementById('start-button').style.display = 'inline-block';
+        // Show download button
+        document.getElementById('download-button').style.display = 'inline-block';
+        // Logic to stop recognition process and get recognized text
+    }
+
+    // Function to download recognized text as a file
+    function downloadTextAsFile(text) {
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'recognized_text.txt';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+
+    // Event listeners
+    document.addEventListener('paste', handleImagePaste);
+    document.getElementById('image-input').addEventListener('change', handleFileInputChange);
+    document.getElementById('upload-button').addEventListener('click', function () {
+        const imgElement = document.getElementById('image-container').querySelector('img');
+        const responseMessage = document.getElementById('response-message');
+        if (imgElement) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = imgElement.width;
+            canvas.height = imgElement.height;
+            ctx.drawImage(imgElement, 0, 0);
+            const imageData = canvas.toDataURL('image/png');
+            uploadImageToServer(imageData);
+        } else {
+            responseMessage.textContent = 'No image found';
+        }
+    });
+
+    // Event listener for start button
+    document.getElementById('start-button').addEventListener('click', startRecognition);
+
+    // Event listener for stop button
+    document.getElementById('stop-button').addEventListener('click', stopRecognitionAndShowDownloadButton);
+
+    // Event listener for download button
+    document.getElementById('download-button').addEventListener('click', function () {
+        const recognizedText = "Example recognized text"; // Replace with actual recognized text
+        downloadTextAsFile(recognizedText);
+    });
+
 });
