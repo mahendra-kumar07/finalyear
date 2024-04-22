@@ -121,4 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
         downloadTextAsFile(recognizedText);
     });
 
+    // Event listener for continue button
+    document.getElementById('continue-button').addEventListener('click', function () {
+        document.getElementById('welcome-container').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+    });
+
 });

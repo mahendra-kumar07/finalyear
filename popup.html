@@ -7,20 +7,27 @@
   <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
-  <h1>Handwritten Character Recognition</h1>
-  <div id="image-container">
-    <!-- Image will be displayed here -->
+  <div id="welcome-container">
+    <h1 class="welcome-text">Welcome to Handwritten Character Recognition</h1>
+    <!-- Add animations and other elements here -->
+    <button id="continue-button">Continue</button>
   </div>
-  <input type="file" id="image-input" style="display: none;" accept="image/*">
-  <label for="image-input" id="upload-button">Upload Image</label>
-  <div id="response-message"></div>
+  
+  <div id="main-content" style="display: none;">
+    <h1>Handwritten Character Recognition</h1>
+    <div id="image-container">
+      <!-- Image will be displayed here -->
+    </div>
+    <input type="button" id="image-input" style="display: none;" accept="image/*">
+    <label for="image-input" id="upload-button">Upload Image</label>
+    <button id="start-button">Start</button>
+    <button id="stop-button">Stop</button>
+    <button id="download-button" style="display: none;">Download</button>
+    <div id="response-message"></div>
 
-  <!-- Hidden textarea to capture paste event -->
-  <textarea id="hidden-textarea" style="position: absolute; top: -9999px; left: -9999px;"></textarea>
-
-  <button id="start-button">Start</button>
-  <button id="stop-button" style="display: none;">Stop</button>
-  <button id="download-button" style="display: none;">Download Recognized Text</button>
+    <!-- Hidden textarea to capture paste event -->
+    <textarea id="hidden-textarea" style="position: absolute; top: -9999px; left: -9999px;"></textarea>
+  </div>
 
   <script src="popup.js"></script>
 </body>

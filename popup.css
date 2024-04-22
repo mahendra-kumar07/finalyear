@@ -1,12 +1,15 @@
+/* Global styles */
+
 body {
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 20px;
+  margin: 22px;
+  padding: 19px;
   width: 400px;
+  height: 226.75px; /* Adjusting the height to match the specified size */
 }
 
 h1 {
@@ -16,11 +19,11 @@ h1 {
 
 #image-container {
   border: 2px dashed #aaa;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 1px;
+  margin-bottom: 13px;
   width: 100%; /* Allow dynamic width based on content */
-  max-width: 400px; /* Set a maximum width */
-  height: 200px;
+  max-width: 390px; /* Set a maximum width */
+  height: 146px;
   overflow: auto; /* Add scrollbars if content overflows both vertically and horizontally */
   display: flex;
   align-items: center;
@@ -35,7 +38,7 @@ h1 {
 #upload-button {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 20px;
+  padding: 6px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -49,4 +52,78 @@ h1 {
 #response-message {
   font-size: 14px;
   margin-top: 10px;
+}
+
+/* Welcome page styles */
+
+#welcome-container {
+  text-align: center;
+  margin-top: 3px; /* Adjusting margin-top for center alignment */
+}
+
+.welcome-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeInUp 1s forwards;
+  animation-delay: 0.5s;
+}
+
+#continue-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  opacity: 0;
+  animation: fadeInUp 1s forwards;
+  animation-delay: 1s;
+}
+
+#start-button{
+  
+    display: inline-grid;
+    background-color: darkblue;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 23px;
+    align-items: center;
+
+}
+#stop-button{
+    display: inline-block;
+    background-color: #c2152a;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 23px;
+    align-items: center;
+
+}
+#download-button{
+    display: inline-block;
+    background-color: #be6710;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 23px;
+    align-items: center;
+    cursor: pointer;
+}
+#continue-button:hover {
+  background-color: #45a049;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
