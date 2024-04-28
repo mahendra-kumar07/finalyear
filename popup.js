@@ -38,32 +38,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Function to handle image upload to backend
-    async function uploadImageToServer(imageData) {
-        const responseMessage = document.getElementById('response-message');
-        try {
-            const response = await fetch('http://localhost:8000/upload/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ image_data: imageData })
-            });
-            if (response.ok) {
-                responseMessage.textContent = 'Sign in';
-            } else {
-                throw new Error('Failed to upload image');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            responseMessage.textContent = 'Error uploading image';
-        }
+    // Function to upload image to backend
+async function uploadImageToServer(imageData) {
+    const formData = new FormData();
+    formData.append('file', imageData, 'image.png');
+  
+    try {
+      const response = await fetch('http://localhost:8000/upload/', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        responseMessage.textContent = 'Image uploaded successfully!';
+      } else {
+        throw new Error('Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      responseMessage.textContent = 'Error uploading image';
     }
+  }
+  
 
     // Function to start recognition process
     function startRecognition() {
         // Show stop button and hide start button
         document.getElementById('start-button').style.display = 'none';
         document.getElementById('stop-button').style.display = 'inline-block';
+        document.getElementById('continue-uploading-button').style.display = 'inline-block';
+        document.getElementById('upload-button').style.display = 'none';
         // Logic to start recognition process
     }
 
@@ -75,7 +78,20 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show download button
         document.getElementById('download-button').style.display = 'inline-block';
         // Logic to stop recognition process and get recognized text
+        
     }
+    // Function to stop recognition process and show upload button
+function stopRecognitionAndShowUploadButton() {
+  // Hide stop button and show start button
+  document.getElementById('stop-button').style.display = 'none';
+  document.getElementById('start-button').style.display = 'inline-block';
+  // Show upload button
+  document.getElementById('continue-uploading-button').style.display = 'none'; // Hide continue uploading button
+  document.getElementById('upload-button').style.display = 'inline-block'; // Show upload button
+  // Logic to stop recognition process
+}
+
+    
 
     // Function to download recognized text as a file
     function downloadTextAsFile(text) {
@@ -93,28 +109,53 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listeners
     document.addEventListener('paste', handleImagePaste);
     document.getElementById('image-input').addEventListener('change', handleFileInputChange);
-    document.getElementById('upload-button').addEventListener('click', function () {
-        const imgElement = document.getElementById('image-container').querySelector('img');
-        const responseMessage = document.getElementById('response-message');
-        if (imgElement) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = imgElement.width;
-            canvas.height = imgElement.height;
-            ctx.drawImage(imgElement, 0, 0);
-            const imageData = canvas.toDataURL('image/png');
-            uploadImageToServer(imageData);
-        } else {
-            responseMessage.textContent = 'No image found';
-        }
-    });
+    // Event listener for stop button
+    document.getElementById('stop-button').addEventListener('click', stopRecognitionAndShowUploadButton);
 
+    // Event listener for upload button
+document.getElementById('upload-button').addEventListener('click', async function () {
+    const imgElement = document.getElementById('image-container').querySelector('img');
+    const responseMessage = document.getElementById('response-message');
+    if (imgElement) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = imgElement.width;
+      canvas.height = imgElement.height;
+      ctx.drawImage(imgElement, 0, 0);
+  
+      // Encode canvas content as data URL
+      const imageData = canvas.toDataURL('image/png');
+  
+      // Upload the image data to backend
+      await uploadImageToServer(imageData);
+    } else {
+      responseMessage.textContent = 'No image found';
+    }
+  });
+
+  const hiddenTextarea = document.getElementById('hidden-textarea');
+  hiddenTextarea.addEventListener('paste', handleImagePaste);
+  document.getElementById('image-input').addEventListener('change', handleFileInputChange);
     // Event listener for start button
     document.getElementById('start-button').addEventListener('click', startRecognition);
 
     // Event listener for stop button
     document.getElementById('stop-button').addEventListener('click', stopRecognitionAndShowDownloadButton);
-
+    document.getElementById('continue-uploading-button').addEventListener('click', function () {
+      const imgElement = document.getElementById('image-container').querySelector('img');
+      const responseMessage = document.getElementById('response-message');
+      if (imgElement) {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = imgElement.width;
+          canvas.height = imgElement.height;
+          ctx.drawImage(imgElement, 0, 0);
+          const imageData = canvas.toDataURL('image/png');
+          uploadImageToServer(imageData);
+      } else {
+          responseMessage.textContent = 'No image found';
+      }
+  });
     // Event listener for download button
     document.getElementById('download-button').addEventListener('click', function () {
         const recognizedText = "Example recognized text"; // Replace with actual recognized text

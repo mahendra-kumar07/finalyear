@@ -45,6 +45,18 @@ h1 {
   transition: background-color 0.3s;
 }
 
+#continue-uploading-button{
+  display: inline-block;
+  background-color: #3a7020;
+  border-style: outset;
+  font-family: auto;
+  color: #ffffff;
+  border-width: 4px;
+  cursor: pointer;
+  padding-block: 4px;
+  padding-inline: 13px;
+}
+
 #upload-button:hover {
   background-color: #45a049;
 }
